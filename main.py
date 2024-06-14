@@ -11,15 +11,15 @@ def main():
     sorted_files_exp = sorted(listdir(folder_path_exp), key=lambda x: [int(i) for i in re.findall(r'\d+', x)])
     sorted_files_reg = sorted(listdir(folder_path_reg), key=lambda x: [int(i) for i in re.findall(r'\d+', x)])
     for f in sorted_files_exp:
-        simulate_from_file_and_save_with_given_color(folder_path_exp,'graphs/results2.xlsx',f,'half')
-        simulate_from_file_and_save_with_given_color(folder_path_exp,'graphs/results2.xlsx',f,'random')
-        simulate_from_file_and_save_with_given_color(folder_path_exp,'graphs/results2.xlsx',f,'recolor_j')
-        simulate_from_file_and_save(folder_path_exp, 'graphs/results2.xlsx',f,'expander')
+        simulate_from_file_and_save_with_given_color(folder_path_exp,'graphs/results.xlsx',f,'half')
+        simulate_from_file_and_save_with_given_color(folder_path_exp,'graphs/results.xlsx',f,'random')
+        simulate_from_file_and_save_with_given_color(folder_path_exp,'graphs/results.xlsx',f,'recolor_j')
+        simulate_from_file_and_save(folder_path_exp, 'graphs/results.xlsx',f,'expander')
     for f in sorted_files_reg:
-        simulate_from_file_and_save_with_given_color(folder_path_reg,'graphs/results2.xlsx',f,'half')
-        simulate_from_file_and_save_with_given_color(folder_path_reg,'graphs/results2.xlsx',f,'random')
-        simulate_from_file_and_save_with_given_color(folder_path_reg,'graphs/results2.xlsx',f,'recolor_j')
-        simulate_from_file_and_save(folder_path_reg,'graphs/results2.xlsx',f,'regular')
+        simulate_from_file_and_save_with_given_color(folder_path_reg,'graphs/results.xlsx',f,'half')
+        simulate_from_file_and_save_with_given_color(folder_path_reg,'graphs/results.xlsx',f,'random')
+        simulate_from_file_and_save_with_given_color(folder_path_reg,'graphs/results.xlsx',f,'recolor_j')
+        simulate_from_file_and_save(folder_path_reg,'graphs/results.xlsx',f,'regular')
 
 
 # then the ratio of edges forces n * k = m*d
