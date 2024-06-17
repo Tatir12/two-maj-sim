@@ -16,7 +16,7 @@ def main():
     m = multiprocessing.Manager()
     lock = m.Lock()
 
-    executor = concurrent.futures.ProcessPoolExecutor(20)
+    executor = concurrent.futures.ProcessPoolExecutor(10)
     futures = [executor.submit(simulate_all, folder_path_exp, 'graphs/resultsc.xlsx',f,'expander',lock) for f in sorted_files_exp] + [executor.submit(simulate_all, folder_path_reg, 'graphs/resultsc.xlsx',f,'regular',lock) for f in sorted_files_reg]
     concurrent.futures.wait(futures)
     # for f in sorted_files_exp:
