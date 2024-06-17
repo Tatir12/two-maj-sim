@@ -9,6 +9,5 @@
 #SBATCH --time=96:00:00
 #SBATCH --no-requeue
 #SBATCH --mail-type=FAIL
-#SBATCH –-extra-node-info=2:10:1
 
 srun python main.py
