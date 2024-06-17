@@ -12,3 +12,4 @@
 
 module load python
 python main.py
+srun
