@@ -10,4 +10,5 @@
 #SBATCH --no-requeue
 #SBATCH --mail-type=FAIL
 
+pip install matplotlib
 srun python main.py
