@@ -72,7 +72,6 @@ def write_excel_results(df,output_file,sheet,lock):
         writer = pd.ExcelWriter(output_file, engine = 'openpyxl',mode='a', if_sheet_exists='overlay')
         df.to_excel(writer, index=False, sheet_name = sheet, startrow=writer.sheets[sheet].max_row, header=None)
         writer.close()
-        time.sleep(1)
 
 def simulate_from_file_and_save(folder_path,output_file,file_name,sheet,lock):
     #Read the graph from a file
