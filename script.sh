@@ -10,4 +10,5 @@
 #SBATCH --no-requeue
 #SBATCH --mail-type=FAIL
 
+module load python
 python main.py
