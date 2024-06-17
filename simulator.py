@@ -57,22 +57,24 @@ def calculate_edge_expansion(G,m,d,k):
 def get_graph_from_file(file_name):
     return nx.read_adjlist(file_name)
 
-def write_excel_results(df,output_file,sheet):
-    if not os.path.exists(output_file):
-        df_aux=pd.DataFrame(columns=['m','d','k', 'n','total_steps', 'productive_steps', 'bias_0', 'bias_T','conductance', 'e_exoansion','n_expansion'])
-        df_aux_re=pd.DataFrame(columns=['m','d','k', 'n','total_steps', 'productive_steps', 'bias_0', 'bias_T','conductance', 'e_exoansion','n_expansion','j'])
-        writer = pd.ExcelWriter(output_file, engine = 'openpyxl',mode='w')
-        df_aux.to_excel(writer, index=False, sheet_name = 'expander')
-        df_aux.to_excel(writer, index=False, sheet_name = 'regular')
-        df_aux.to_excel(writer, index=False, sheet_name = 'half')
-        df_aux.to_excel(writer, index=False, sheet_name = 'random')
-        df_aux_re.to_excel(writer, index=False, sheet_name = 'recolor_j')
+def write_excel_results(df,output_file,sheet,lock):
+    with lock:
+        if not os.path.exists(output_file):
+            df_aux=pd.DataFrame(columns=['m','d','k', 'n','total_steps', 'productive_steps', 'bias_0', 'bias_T','conductance', 'e_exoansion','n_expansion'])
+            df_aux_re=pd.DataFrame(columns=['m','d','k', 'n','total_steps', 'productive_steps', 'bias_0', 'bias_T','conductance', 'e_exoansion','n_expansion','j'])
+            writer = pd.ExcelWriter(output_file, engine = 'openpyxl',mode='w')
+            df_aux.to_excel(writer, index=False, sheet_name = 'expander')
+            df_aux.to_excel(writer, index=False, sheet_name = 'regular')
+            df_aux.to_excel(writer, index=False, sheet_name = 'half')
+            df_aux.to_excel(writer, index=False, sheet_name = 'random')
+            df_aux_re.to_excel(writer, index=False, sheet_name = 'recolor_j')
+            writer.close()
+        writer = pd.ExcelWriter(output_file, engine = 'openpyxl',mode='a', if_sheet_exists='overlay')
+        df.to_excel(writer, index=False, sheet_name = sheet, startrow=writer.sheets[sheet].max_row, header=None)
         writer.close()
-    writer = pd.ExcelWriter(output_file, engine = 'openpyxl',mode='a', if_sheet_exists='overlay')
-    df.to_excel(writer, index=False, sheet_name = sheet, startrow=writer.sheets[sheet].max_row, header=None)
-    writer.close()
+        time.sleep(1)
 
-def simulate_from_file_and_save(folder_path,output_file,file_name,sheet):
+def simulate_from_file_and_save(folder_path,output_file,file_name,sheet,lock):
     #Read the graph from a file
     my_graph=get_graph_from_file(folder_path +  file_name)
     m,d,k= [int(t) for t in re.findall(r'\d+',file_name)]
@@ -83,10 +85,10 @@ def simulate_from_file_and_save(folder_path,output_file,file_name,sheet):
     df=pd.DataFrame(columns=['m','d','k', 'n','steps', 'productive_steps', 'bias_0', 'bias_T','conductance', 'e_exoansion','n_expansion'])
     df.loc[len(df.index)]=[m,d,k,len(my_graph.nodes),steps,output,calculate_bias(my_color),calculate_bias(my_color_sim),calculate_conductance(my_graph,m,d,k),calculate_edge_expansion(my_graph,m,d,k),calculate_node_expansion(my_graph,m,d,k)]
     #Save to an excel document
-    write_excel_results(df,output_file,sheet)
+    write_excel_results(df,output_file,sheet,lock)
     return df
 
-def simulate_from_file_and_save_with_given_color(folder_path,output_file,file_name,sheet):
+def simulate_from_file_and_save_with_given_color(folder_path,output_file,file_name,sheet,lock):
     #Read the graph from a file
     m,d,k= [int(t) for t in re.findall(r'\d+',file_name)]
     my_graph=get_graph_from_file(folder_path + file_name)
@@ -112,14 +114,12 @@ def simulate_from_file_and_save_with_given_color(folder_path,output_file,file_na
         df=pd.DataFrame(columns=['m','d','k', 'n','steps', 'productive_steps', 'bias_0', 'bias_T' ,'conductance', 'e_exoansion','n_expansion', 'j'])
         df.loc[len(df.index)]=[m,d,k,len(my_graph.nodes),steps,output,calculate_bias(my_color),calculate_bias(my_color_sim),calculate_conductance(my_graph,m,d,k),calculate_edge_expansion(my_graph,m,d,k),calculate_node_expansion(my_graph,m,d,k),j]
     #Save to an excel document
-    write_excel_results(df,output_file,sheet)
+    write_excel_results(df,output_file,sheet,lock)
     return df
 
 def simulate_all(folder_path,output,f,sheet,lock):
-    with lock:
-        simulate_from_file_and_save_with_given_color(folder_path,output,f,'half')
-        simulate_from_file_and_save_with_given_color(folder_path,output,f,'random')
-        simulate_from_file_and_save_with_given_color(folder_path,output,f,'recolor_j')
-        simulate_from_file_and_save(folder_path, output,f, sheet)
-        time.sleep(5)
+    simulate_from_file_and_save_with_given_color(folder_path,output,f,'half',lock)
+    simulate_from_file_and_save_with_given_color(folder_path,output,f,'random',lock)
+    simulate_from_file_and_save_with_given_color(folder_path,output,f,'recolor_j',lock)
+    simulate_from_file_and_save(folder_path, output,f, sheet,lock)
     return true
