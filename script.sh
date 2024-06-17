@@ -11,5 +11,4 @@
 #SBATCH --mail-type=FAIL
 
 module load python
-python main.py
-srun
+srun python main.py
