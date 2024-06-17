@@ -121,4 +121,5 @@ def simulate_all(folder_path,output,f,sheet,lock):
     simulate_from_file_and_save_with_given_color(folder_path,output,f,'random',lock)
     simulate_from_file_and_save_with_given_color(folder_path,output,f,'recolor_j',lock)
     simulate_from_file_and_save(folder_path, output,f, sheet,lock)
+    print(f)
     return true
