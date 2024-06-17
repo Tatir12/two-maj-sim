@@ -7,7 +7,7 @@ from openpyxl import Workbook
 import re
 import os
 from ColorGenerator import *
-
+import time
 
 def simulate(G, cm):
     color_map= copy.deepcopy(cm)
@@ -114,3 +114,12 @@ def simulate_from_file_and_save_with_given_color(folder_path,output_file,file_na
     #Save to an excel document
     write_excel_results(df,output_file,sheet)
     return df
+
+def simulate_all(folder_path,output,f,sheet,lock):
+    with lock:
+        simulate_from_file_and_save_with_given_color(folder_path,output,f,'half')
+        simulate_from_file_and_save_with_given_color(folder_path,output,f,'random')
+        simulate_from_file_and_save_with_given_color(folder_path,output,f,'recolor_j')
+        simulate_from_file_and_save(folder_path, output,f, sheet)
+        time.sleep(5)
+    return true
