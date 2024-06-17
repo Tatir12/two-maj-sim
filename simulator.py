@@ -72,7 +72,7 @@ def write_excel_results(df,output_file,sheet,lock):
         writer = pd.ExcelWriter(output_file, engine = 'openpyxl',mode='a', if_sheet_exists='overlay')
         df.to_excel(writer, index=False, sheet_name = sheet, startrow=writer.sheets[sheet].max_row, header=None)
         writer.close()
-
+        time.sleep(2)
 def simulate_from_file_and_save(folder_path,output_file,file_name,sheet,lock):
     #Read the graph from a file
     my_graph=get_graph_from_file(folder_path +  file_name)
@@ -121,5 +121,4 @@ def simulate_all(folder_path,output,f,sheet,lock):
     simulate_from_file_and_save_with_given_color(folder_path,output,f,'random',lock)
     simulate_from_file_and_save_with_given_color(folder_path,output,f,'recolor_j',lock)
     simulate_from_file_and_save(folder_path, output,f, sheet,lock)
-    print(f)
     return true
