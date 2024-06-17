@@ -10,4 +10,4 @@
 #SBATCH --no-requeue
 #SBATCH --mail-type=FAIL
 
-srun python main.py
+python main.py
